@@ -13,4 +13,8 @@ LazyData: true
 RoxygenNote: 6.0.1
 Imports: dplyr,
     csvread,
-    stringr
+    stringr,
+    RJDBC,
+    DBI,
+    rJava,
+    magrittr

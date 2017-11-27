@@ -61,7 +61,7 @@ achievement=function(){
     if(i!=1) rownames1=c(rownames2,rownames1)
   }
   print(temp[rownames1,2])
-  temp[rownames,2]=ifelse(temp[rownames,2]>0,criteria_caution,criteria_caution*(-1))
+  temp[rownames1,2]=ifelse(temp[rownames1,2]>0,criteria_caution,criteria_caution*(-1))
   print(temp[rownames1,2])
   temp1=temp
   temp<<-temp1

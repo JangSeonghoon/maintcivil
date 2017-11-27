@@ -44,27 +44,25 @@ devtools::use_package("stringr")
 #' @export
 
 
-tqi=function(){
+tqiDB=function(year,startD,lastD){
   A=cmpfun(function(){
-    if(!require(dplyr)){
-      library(dplyr)
-    }
-    if(!require(csvread)){
-      library(csvread)
-    }
-    if(!require(stringr)){
-      library(sringr)
+
+    year=as.integer(year)
+    startD=as.integer(startD)
+    lastD=as.integer(lastD)
+    drv=JDBC("oracle.jdbc.driver.OracleDriver","/home/jsh/Downloads/ojdbc6.jar")
+    conn=dbConnect(drv,"jdbc:oracle:thin:@localhost:1521:xe","korail150773","0818")
+    rs=dbSendQuery(conn,paste0("select * from inspect",year))
+    temp=dbFetch(rs)
+    temp=temp[-1,]
+    names(temp)[1]="distance"
+    i=1;for(i in 1:length(temp)){
+      temp[,i]=str_replace_all(temp[,i],"(\")","")
+      temp[,i]=as.numeric(temp[,i])
     }
 
-    fileList=list.files()
-    print(fileList)
 
-    startF=readline(prompt="몇번째 파일? :")
-    startF=as.numeric(startF)
-    lastF=startF #file parameter
-    lastF=as.numeric(lastF)
 
-    fileList=fileList[startF:lastF]
 
     print("1. m단위 입력")
     print("2. 범위를 200m로 구분되게 설정 ex)19000~19400")

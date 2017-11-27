@@ -37,9 +37,38 @@ notify=function(){
       if(!require(stringr)){
         library(sringr)
       }
+  
+  print("input TQI_file to directory of input")
+  directoryCheck=readline(prompt="directory: /home/jsh/Rwork/input right?(1.yes, 2.no)")
+  directoryCheck=as.integer(directoryCheck)
+  if(directoryCheck==1){
+    setwd("/home/jsh/Rwork/input")
+  }else if(directoryCheck==2){
+    directory=readline(prompt="write your Directory:(without double quotation)")
+    directory=as.character(directory)
+    setwd(directory)
+  }
+  
+  fileCheck=readline(prompt=paste0("1. I have seperated TQI file,though","\n","2. I've already executed tqi() function"))
+  fileCheck=as.numeric(fileCheck)
+  
+  if(fileCheck==1){
+    file_tqi=list.files()
+    print(list.files())
+    fileNo=readline(prompt="What number is your fileNo?")
+    fileNo=as.integer(fileNo)
+    coltypes=map.coltypes(file_tqi[fileNo],header=T)
+    temp=csvread(file_tqi[fileNo],coltypes=coltypes,header=T)
+    
+    print("3.GAGE 4.PRR 6.ALL 8.TWIST 9.SUP")
+    kind=readline(prompt="kind: ")
+    kind=as.integer(kind)
+    kind<<-kind
+  }
+  
   equipOrNot=readline(prompt="1.equip 2.manual : ")
   equipOrNot=as.integer(equipOrNot)
-
+  
   if(equipOrNot==1){
     if(kind==3){
       criteria=0
