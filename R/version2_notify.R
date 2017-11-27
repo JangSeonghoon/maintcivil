@@ -54,7 +54,8 @@ notify_ver2=function(year,quater,workspace_no,carKind){
       j=1;for(j in 1:length(temp)){
         temp[,j]=str_replace_all(temp[,j],"(\")","")
       }
-      temp=temp[temp$CARKIND==carkind,]
+      car=ifelse(carkind==1,"궤도검측차","종합검측차")
+      temp=temp[temp$CARKIND==car,]
       i=c(2,3,4,5,6,10,11)
       k=1;for(k in 1:length(i)){
 
