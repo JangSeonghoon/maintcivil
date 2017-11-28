@@ -20,4 +20,5 @@ Imports: dplyr,
     magrittr,
     plotly,
     htmlwidgets,
-    tidyr
+    tidyr,
+    compiler

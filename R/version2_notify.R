@@ -13,6 +13,8 @@ devtools::use_package("RJDBC")
 devtools::use_package("plotly")
 devtools::use_package("htmlwidgets")
 devtools::use_package("tidyr")
+devtools::use_package("compiler")
+
 
 #' @importFrom compiler cmpfun
 #' @importFrom magrittr %>%
@@ -166,7 +168,7 @@ notify_ver2=function(year,quater,workspace_no,carKind){
           xaxis = list( rangeslider = list(type = "LOCATION"),title=""),
           yaxis = list(title = "INSPECT"))
 
-
+      p1=p %>% layout(xaxis=list(range=c(19.146,19.147)))
 
       saveWidget(p,"/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/html/graph/temp.html")
 
