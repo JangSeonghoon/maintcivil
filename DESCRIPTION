@@ -17,4 +17,6 @@ Imports: dplyr,
     RJDBC,
     DBI,
     rJava,
-    magrittr
+    magrittr,
+    plotly,
+    htmlwidgets

@@ -159,9 +159,9 @@ notify_ver2=function(year,quater,workspace_no,carKind){
         ) %>%
         layout(
           title = "FIX",
-          xaxis = list(
-            rangeslider = list(type = "LOCATION")),
+          xaxis = list( rangeslider = list(type = "LOCATION"),title=""),
           yaxis = list(title = "INSPECT"))
+
 
 
       saveWidget(p,"/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/html/graph/temp.html")
