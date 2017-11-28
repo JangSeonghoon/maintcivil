@@ -128,7 +128,7 @@ notify_ver2=function(year,quater,workspace_no,carKind){
       LOCATION=start+0.001*((1:n)-1)
       names(test)[1]="LOCATION"
       test=test %>% group_by(PARAMETER, LOCATION) %>% mutate(ind=row_number()) %>% spread("PARAMETER","MAX")
-      est=left_join(data.frame(LOCATION=LOCATION),test,by="LOCATION")
+      test=left_join(data.frame(LOCATION=LOCATION),test,by="LOCATION")
       test=test[,-2]
       i=1;for(i in 1:length(test)){
         test[is.na(test[,i]),i]=0
@@ -167,13 +167,10 @@ notify_ver2=function(year,quater,workspace_no,carKind){
       saveWidget(p,"/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/html/graph/temp.html")
 
       i=1;for(i in 1:length(caution[,1])){
-
-        saveWidget(paste0("
-          p %>% layout(
-            xaxis=list(range=c(",caution$STARTD[i],caution$LASTD[i],"))
-          ),
-        '/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/html/graph/temp",i,".html'")
-        )
+        p1=p %>% layout(xaxis=list(range=c(caution[i,5],caution[i,6])))
+        name=paste0("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/html/graph/temp",i,".html")
+        saveWidget(p1,name)
+        print(i)
       }
 
     }#function
