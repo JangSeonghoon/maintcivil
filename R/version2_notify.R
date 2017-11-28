@@ -41,6 +41,7 @@ devtools::use_package("tidyr")
 #' @importFrom DBI dbDisconnect
 #' @importFrom RJDBC JDBC
 #' @importFrom plotly plot_ly
+#' @importFrom plotly add_trace
 #' @importFrom htmlwidgets saveWidget
 #' @importFrom tidyr spread
 #' @export
