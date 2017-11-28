@@ -12,6 +12,7 @@ devtools::use_package("DBI")
 devtools::use_package("RJDBC")
 devtools::use_package("plotly")
 devtools::use_package("htmlwidgets")
+devtools::use_package("tidyr")
 
 #' @importFrom compiler cmpfun
 #' @importFrom magrittr %>%
@@ -41,6 +42,7 @@ devtools::use_package("htmlwidgets")
 #' @importFrom RJDBC JDBC
 #' @importFrom plotly plot_ly
 #' @importFrom htmlwidgets saveWidget
+#' @importFrom tidyr spread
 #' @export
 notify_ver2=function(year,quater,workspace_no,carKind){
   A=cmpfun(
