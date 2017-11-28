@@ -48,7 +48,7 @@ devtools::use_package("compiler")
 #' @importFrom htmlwidgets saveWidget
 #' @importFrom tidyr spread
 #' @export
-notify_ver2=function(year,quater,workspace_no,carKind){
+notify_ver=function(year,quater,workspace_no,carKind){
   A=cmpfun(
     function(){
 
