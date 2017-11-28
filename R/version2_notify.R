@@ -10,17 +10,11 @@ devtools::use_package("stringr")
 devtools::use_package("rJava")
 devtools::use_package("DBI")
 devtools::use_package("RJDBC")
+devtools::use_package("plotly")
+devtools::use_package("htmlwidgets")
 
-#' @importFrom csvread map.coltypes
-#' @importFrom csvread csvread
 #' @importFrom compiler cmpfun
-#' @importFrom stringr str_detect
-#' @importFrom stringr str_replace
-#' @importFrom stringr str_replace_all
-#' @importFrom stringr str_extract
-#' @importFrom stringr str_extract_all
-#' @importFrom stringr str_sub
-#' @importFrom stringr str_c
+#' @importFrom magrittr %>%
 #' @importFrom dplyr select
 #' @importFrom dplyr filter
 #' @importFrom dplyr arrange
@@ -28,7 +22,15 @@ devtools::use_package("RJDBC")
 #' @importFrom dplyr mutate
 #' @importFrom dplyr group_by
 #' @importFrom dplyr left_join
-#' @importFrom RJDBC JDBC
+#' @importFrom csvread map.coltypes
+#' @importFrom csvread csvread
+#' @importFrom stringr str_detect
+#' @importFrom stringr str_replace
+#' @importFrom stringr str_replace_all
+#' @importFrom stringr str_extract
+#' @importFrom stringr str_extract_all
+#' @importFrom stringr str_sub
+#' @importFrom stringr str_c
 #' @importFrom DBI dbConnect
 #' @importFrom DBI dbSendQuery
 #' @importFrom DBI dbExecute
@@ -36,7 +38,9 @@ devtools::use_package("RJDBC")
 #' @importFrom DBI dbHasCompleted
 #' @importFrom DBI dbWriteTable
 #' @importFrom DBI dbDisconnect
-#' @importFrom magrittr %>%
+#' @importFrom RJDBC JDBC
+#' @importFrom plotly plot_ly
+#' @importFrom htmlwidgets saveWidget
 #' @export
 notify_ver2=function(year,quater,workspace_no,carKind){
   A=cmpfun(
@@ -115,6 +119,63 @@ notify_ver2=function(year,quater,workspace_no,carKind){
         dbDisconnect(conn)
       }
       return(caution)
+
+      test=caution[,c(9,4,8)]
+      start=min(caution$STARTD)
+      last=max(caution$LASTD)
+      test=rbind(test,data.frame(EXCEPT=rep(start,7),PARAMETER=c("GAGE","PROFILE LEFT","PROFILE RIGHT","ALIGNMENT LEFT","ALIGNMENT RIGHT","SUP","TWIST 3M"),MAX=rep(0,7)))
+      n=(last-start)/0.001+1
+      LOCATION=start+0.001*((1:n)-1)
+      names(test)[1]="LOCATION"
+      test=test %>% group_by(PARAMETER, LOCATION) %>% mutate(ind=row_number()) %>% spread("PARAMETER","MAX")
+      est=left_join(data.frame(LOCATION=LOCATION),test,by="LOCATION")
+      test=test[,-2]
+      i=1;for(i in 1:length(test)){
+        test[is.na(test[,i]),i]=0
+        print(i)
+      }
+
+      p <- plot_ly(x = ~ test$`LOCATION`, y = ~test$`GAGE`, type = 'scatter', mode = 'lines', name = 'GAGE', fill = 'tozeroy'
+                   # , fillcolor = 'rgba(168, 216, 234, 0.5)'
+                   ,
+                   line = list(width = 0.5)) %>%
+        add_trace(x = ~test$LOCATION, y = ~test$`ALIGNMENT LEFT`, name = 'ALIGNMENT LEFT', fill = 'tozeroy'
+                  # ,fillcolor = 'rgba(255, 212, 96, 0.5)')
+        ) %>%
+        add_trace(x = ~test$LOCATION, y = ~test$`ALIGNMENT RIGHT`, name = 'ALIGNMENT RIGHT', fill = 'tozeroy'
+                  # ,fillcolor = 'rgba(255, 212, 96, 0.5)')
+        ) %>%
+        add_trace(x = ~test$LOCATION, y = ~test$`PROFILE LEFT`, name = 'PROFILE LEFT', fill = 'tozeroy'
+                  # ,fillcolor = 'rgba(255, 212, 96, 0.5)')
+        ) %>%
+        add_trace(x = ~test$LOCATION, y = ~test$`PROFILE RIGHT`, name = 'PROFILE RIGHT', fill = 'tozeroy'
+                  # ,fillcolor = 'rgba(255, 212, 96, 0.5)')
+        ) %>%
+        add_trace(x = ~test$LOCATION, y = ~test$SUP, name = 'SUP', fill = 'tozeroy'
+                  # ,fillcolor = 'rgba(255, 212, 96, 0.5)')
+        ) %>%
+        add_trace(x = ~test$LOCATION, y = ~test$`TWIST 3M`, name = 'TWIST 3M', fill = 'tozeroy'
+                  # , fillcolor = 'rgba(255, 212, 96, 0.5)')
+        ) %>%
+        layout(
+          title = "FIX",
+          xaxis = list(
+            rangeslider = list(type = "LOCATION")),
+          yaxis = list(title = "INSPECT"))
+
+
+      saveWidget(p,"/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/html/graph/temp.html")
+
+      i=1;for(i in 1:length(caution[,1])){
+
+        saveWidget(paste0("
+          p %>% layout(
+            xaxis=list(range=c(",caution$STARTD[i],caution$LASTD[i],"))
+          ),
+        '/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/html/graph/temp",i,".html'")
+        )
+      }
+
     }#function
   )#cmpfun
   A()
