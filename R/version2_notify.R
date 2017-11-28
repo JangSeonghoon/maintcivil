@@ -118,7 +118,7 @@ notify_ver2=function(year,quater,workspace_no,carKind){
         dbWriteTable(conn,"temporary",execCaution)
         dbDisconnect(conn)
       }
-      return(caution)
+
 
       test=caution[,c(9,4,8)]
       start=min(caution$STARTD)
