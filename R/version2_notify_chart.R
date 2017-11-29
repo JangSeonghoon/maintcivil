@@ -100,32 +100,6 @@ notify_chart=function(year,quater,workspace_no,carKind,i){
       caution=temp %>% select(8,12,1,4,5,6,3,2,9,14,13)
       caution=cbind(seq=seq(caution[,3]),caution)
 
-      ########################################
-      #13. ORACLE DB TEMPORARY TABLE RENEWAL #
-      ########################################
-
-      if(length(caution[,1])!=0){
-        try(rs<-dbExecute(conn,"drop table temporary"),
-            silent=T)
-        dbHasCompleted(rs)
-        execCaution=caution
-        names(execCaution)=NULL
-        dbWriteTable(conn,"temporary",execCaution)
-        dbWriteTable
-        dbDisconnect(conn)
-
-      }else{
-        caution=data.frame(start=c(0),last=c(0),count=c(0),speedLimit=c(0),adjustTQI=c(0),original_TQI=c(0),improveTQI=c(0),indexTQI=c(0),priority=c(0))
-        try(rs<-dbExecute(conn,"drop table temporary"),
-            silent=T)
-        dbHasCompleted(rs)
-        names(execCaution)=NULL
-        execCaution=caution
-        dbWriteTable(conn,"temporary",execCaution)
-        dbDisconnect(conn)
-      }
-
-
       test=caution[,c(9,4,8)]
       start=min(caution$STARTD)
       last=max(caution$LASTD)
