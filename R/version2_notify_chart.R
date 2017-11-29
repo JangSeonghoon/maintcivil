@@ -142,7 +142,7 @@ notify_chart=function(year,quater,workspace_no,carKind,order){
           xaxis = list( rangeslider = list(type = "LOCATION"),title=""),
           yaxis = list(title = "INSPECT"))
 
-         p1=p %>% layout(xaxis=list(range=c(caution[order,2]-0.004,caution[order,2]+0.004)))
+         p1=p %>% layout(xaxis=list(range=c(caution[order,9]-0.004,caution[order,9]+0.004)))
          name=paste0("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/html/segment.html")
          saveWidget(p1,name)
 
