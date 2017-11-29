@@ -24,7 +24,7 @@ devtools::use_package("compiler")
 #' @importFrom dplyr summarise
 #' @importFrom dplyr mutate
 #' @importFrom dplyr group_by
-#' @importFrom dplyr left_join
+#' @importFrom dplyr full_join
 #' @importFrom csvread map.coltypes
 #' @importFrom csvread csvread
 #' @importFrom stringr str_detect
@@ -134,7 +134,16 @@ notify_ver=function(year,quater,workspace_no,carKind){
       LOCATION=start+0.001*((1:n)-1)
       names(test)[1]="LOCATION"
       test=test %>% group_by(PARAMETER, LOCATION) %>% mutate(ind=row_number()) %>% spread("PARAMETER","MAX")
-      test=left_join(data.frame(LOCATION=LOCATION),test,by="LOCATION")
+      test=as.data.frame(test)
+      i=1;for(i in 1:length(test)){
+        test[is.na(test[,i]),i]=0
+        print(i)
+      }
+
+      LOC=data.frame(LOCATION=LOCATION)
+      LOC[,1]=round(LOC[,1],digit=3)
+      test[,1]=round(test[,1],digit=3)
+      test=full_join(LOC,test,by="LOCATION")
       test=test[,-2]
       i=1;for(i in 1:length(test)){
         test[is.na(test[,i]),i]=0
