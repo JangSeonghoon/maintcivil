@@ -108,13 +108,22 @@ notify_chart=function(year,quater,workspace_no,carKind,order){
       LOCATION=start+0.001*((1:n)-1)
       names(test)[1]="LOCATION"
       test=test %>% group_by(PARAMETER, LOCATION) %>% mutate(ind=row_number()) %>% spread("PARAMETER","MAX")
-      test=left_join(data.frame(LOCATION=LOCATION),test,by="LOCATION")
-      test=test[,-2]
+      test=as.data.frame(test)
       i=1;for(i in 1:length(test)){
         test[is.na(test[,i]),i]=0
         print(i)
       }
-
+      
+      LOC=data.frame(LOCATION=LOCATION)
+      LOC[,1]=round(LOC[,1],digit=3)
+      test[,1]=round(test[,1],digit=3)
+      test=full_join(LOC,test,by="LOCATION")
+        test=test[,-2]
+      i=1;for(i in 1:length(test)){
+        test[is.na(test[,i]),i]=0
+        print(i)
+      }
+      
       p <- plot_ly(x = ~ test$`LOCATION`, y = ~test$`GAGE`, type = 'scatter', mode = 'lines', name = 'GAGE', fill = 'tozeroy'
                    # , fillcolor = 'rgba(168, 216, 234, 0.5)'
                    ,
