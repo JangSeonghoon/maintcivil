@@ -167,10 +167,9 @@ notify_ver=function(year,quater,workspace_no,carKind){
           title = "FIX",
           xaxis = list( rangeslider = list(type = "LOCATION"),title=""),
           yaxis = list(title = "INSPECT"))
-      return(p)
       # p1=p %>% layout(xaxis=list(range=c(19.146,19.147)))
       #
-      # saveWidget(p,"/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/html/graph/temp.html")
+      saveWidget(p,"/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/html/graph/temp.html")
       #
       # i=1;for(i in 1:length(caution[,1])){
       #   p1=p %>% layout(xaxis=list(range=c(caution[i,5],caution[i,6])))
