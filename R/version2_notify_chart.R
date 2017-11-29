@@ -148,7 +148,7 @@ notify_chart=function(year,quater,workspace_no,carKind,order){
 
     }#function
   )#cmpfun
-  A()
+  A()##
 
 }#function
 
