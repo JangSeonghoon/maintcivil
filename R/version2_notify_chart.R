@@ -24,7 +24,7 @@ devtools::use_package("compiler")
 #' @importFrom dplyr summarise
 #' @importFrom dplyr mutate
 #' @importFrom dplyr group_by
-#' @importFrom dplyr left_join
+#' @importFrom dplyr full_join
 #' @importFrom csvread map.coltypes
 #' @importFrom csvread csvread
 #' @importFrom stringr str_detect
@@ -113,7 +113,7 @@ notify_chart=function(year,quater,workspace_no,carKind,order){
         test[is.na(test[,i]),i]=0
         print(i)
       }
-      
+
       LOC=data.frame(LOCATION=LOCATION)
       LOC[,1]=round(LOC[,1],digit=3)
       test[,1]=round(test[,1],digit=3)
@@ -123,7 +123,7 @@ notify_chart=function(year,quater,workspace_no,carKind,order){
         test[is.na(test[,i]),i]=0
         print(i)
       }
-      
+
       p <- plot_ly(x = ~ test$`LOCATION`, y = ~test$`GAGE`, type = 'scatter', mode = 'lines', name = 'GAGE', fill = 'tozeroy'
                    # , fillcolor = 'rgba(168, 216, 234, 0.5)'
                    ,
