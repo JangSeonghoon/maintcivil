@@ -143,7 +143,7 @@ notify_chart=function(year,quater,workspace_no,carKind,i){
           yaxis = list(title = "INSPECT"))
 
          p1=p %>% layout(xaxis=list(range=c(caution[i,5],caution[i,6])))
-         name=paste0("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/html/graph/segment.html")
+         name=paste0("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/html/segment.html")
          saveWidget(p1,name)
 
     }#function
