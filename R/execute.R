@@ -16,7 +16,7 @@ devtools::use_package("RJDBC")
 #' @importFrom DBI dbDisconnect
 
 #' @export
-execute=function(num,year,quater,plant_no,workspace_no){
+execute=function(num,year,quater,workspace_no){
   A=cmpfun(
     function(){
 
