@@ -21,4 +21,7 @@ Imports: dplyr,
     plotly,
     htmlwidgets,
     tidyr,
-    compiler
+    compiler,
+    highcharter,
+    forecast,
+    stats
