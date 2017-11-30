@@ -39,7 +39,7 @@ devtools::use_package("htmlwidgets")
 #' @importFrom htmlwidgets saveWidget
 #' @export
 tqi_trend=function(distance){
-  len=25.664
+  len=distance
   len1=len*10
   len2=floor(len1)
 
@@ -53,9 +53,6 @@ tqi_trend=function(distance){
 
   round((len*1000)/100,digit=0)
 
-  startD=startD
-  lastD=lastD
-  km=km
   drv=JDBC("oracle.jdbc.driver.OracleDriver","/home/jsh/Download/ojdbc6.jar")
   conn=dbConnect(drv,"jdbc:oracle:thin:@localhost:1521:xe","korail150773","0818")
 
