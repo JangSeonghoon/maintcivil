@@ -157,10 +157,6 @@ inspect=function(order){
         ggsave("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/html/graph/inspect.jpg",
                width=20,height=20,units=c("cm"))
         print(except)
-        c=readBin('inspect.jpg','raw',1024*1024);
-        unlink('inspect.jpg')
-
-      return(c)
 
     }#fun
   )#cmpfun
