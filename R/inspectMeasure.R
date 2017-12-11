@@ -157,7 +157,6 @@ inspect=function(order){
         ggsave("inspect.jpg",
                width=20,height=20,units=c("cm"))
         print(except)
-        dev.off()
         c=readBin('inspect.jpg','raw',1024*1024);
         unlink('inspect.jpg')
 
