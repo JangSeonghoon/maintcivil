@@ -27,6 +27,7 @@ devtools::use_package("RJDBC")
 #' @importFrom ggplot2 geom_abline
 #' @importFrom ggplot2 theme_bw
 #' @importFrom ggplot2 labs
+#' @importFrom ggplot2 ggsave
 #' @importFrom RJDBC JDBC
 #' @importFrom DBI dbConnect
 #' @importFrom DBI dbSendQuery
@@ -142,8 +143,7 @@ inspect=function(order){
                         inspect_3[-((len-absc+1):len),1])
       }
 
-      jpeg('inspect.jpg')
-        inspect_3 %>%
+      inspect_3 %>%
         filter(LOCATION>=(except-0.007)*1000,LOCATION<=(except+0.007)*1000) %>%
         ggplot() +
         aes(x=LOCATION) +
@@ -153,11 +153,14 @@ inspect=function(order){
         geom_line(aes(y=eval(parse(text=names(inspect[5])))),color= '#e60000') +
         geom_abline(slope = 0,intercept = 0) +
         theme_bw()+
-        labs(x="km",y="검측수치")
+        labs(x="km",y="검측수치") +
+        ggsave("inspect.jpg",
+               width=20,height=20,units=c("cm"))
         print(except)
         dev.off()
         c=readBin('inspect.jpg','raw',1024*1024);
         unlink('inspect.jpg')
+
       return(c)
 
     }#fun
