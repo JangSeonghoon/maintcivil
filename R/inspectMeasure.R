@@ -154,7 +154,7 @@ inspect=function(order){
         geom_abline(slope = 0,intercept = 0) +
         theme_bw()+
         labs(x="km",y="검측수치") +
-        ggsave("inspect.jpg",
+        ggsave("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/html/graph/inspect.jpg",
                width=20,height=20,units=c("cm"))
         print(except)
         c=readBin('inspect.jpg','raw',1024*1024);
