@@ -21,6 +21,9 @@ devtools::use_package("RJDBC")
 #' @importFrom dplyr mutate
 #' @importFrom dplyr left_join
 #' @importFrom DMwR centralImputation
+#' @importFrom ggplot ggplot
+#' @importFrom ggplot aes
+#' @importFrom ggplot geom_line
 #' @importFrom RJDBC JDBC
 #' @importFrom DBI dbConnect
 #' @importFrom DBI dbSendQuery
