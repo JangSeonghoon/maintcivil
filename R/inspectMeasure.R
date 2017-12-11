@@ -142,7 +142,7 @@ inspect=function(order){
                         inspect_3[-((len-absc+1):len),1])
       }
 
-      inspect_graph=
+      jpeg('inspect.jpg')
         inspect_3 %>%
         filter(LOCATION>=(except-0.007)*1000,LOCATION<=(except+0.007)*1000) %>%
         ggplot() +
@@ -155,7 +155,10 @@ inspect=function(order){
         theme_bw()+
         labs(x="km",y="검측수치")
         print(except)
-      return(inspect_graph)
+        dev.off('inspect.jpg','raw',1024*1024)
+        unlink('inspect.jpg')
+        c=readBin()
+      return(c)
 
     }#fun
   )#cmpfun
