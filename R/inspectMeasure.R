@@ -25,6 +25,7 @@ devtools::use_package("RJDBC")
 #' @importFrom ggplot2 aes
 #' @importFrom ggplot2 geom_line
 #' @importFrom ggplot2 geom_abline
+#' @importFrom ggplot2 theme_bw
 #' @importFrom RJDBC JDBC
 #' @importFrom DBI dbConnect
 #' @importFrom DBI dbSendQuery
