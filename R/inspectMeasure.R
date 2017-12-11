@@ -155,9 +155,9 @@ inspect=function(order){
         theme_bw()+
         labs(x="km",y="검측수치")
         print(except)
-        dev.off('inspect.jpg','raw',1024*1024)
+        dev.off()
+        c=readBin('inspect.jpg','raw',1024*1024);
         unlink('inspect.jpg')
-        c=readBin()
       return(c)
 
     }#fun
