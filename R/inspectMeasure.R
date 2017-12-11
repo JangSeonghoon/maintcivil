@@ -20,6 +20,7 @@ devtools::use_package("RJDBC")
 #' @importFrom dplyr filter
 #' @importFrom dplyr mutate
 #' @importFrom dplyr left_join
+#' @importFrom DMwR centralImputation
 #' @importFrom RJDBC JDBC
 #' @importFrom DBI dbConnect
 #' @importFrom DBI dbSendQuery
