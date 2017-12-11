@@ -152,11 +152,17 @@ inspect=function(order){
         geom_line(aes(y=eval(parse(text=names(inspect[4])))),color= '#24478f') +
         geom_line(aes(y=eval(parse(text=names(inspect[5])))),color= '#e60000') +
         geom_abline(slope = 0,intercept = 0) +
+        scale_x_continuous(breaks=seq((except-0.007)*1000,(except+0.007)*1000,2)) +
         theme_bw()+
-        labs(x="km",y="검측수치") +
+        labs(x="km",y="검측치") +
+        theme(axis.text.x=element_text(size=13, face="bold"),
+              axis.title.x=element_text(size=15, face="bold"),
+              axis.text.y=element_text(size=15, face="bold"),
+              axis.title.y=element_text(size=15, face="bold"))
         ggsave("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/html/graph/inspect.jpg",
-               width=20,height=20,units=c("cm"))
+               width=20,height=14,units=c("cm"))
         print(except)
+
 
     }#fun
   )#cmpfun
