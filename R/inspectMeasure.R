@@ -29,6 +29,7 @@ devtools::use_package("RJDBC")
 #' @importFrom ggplot2 labs
 #' @importFrom ggplot2 ggsave
 #' @importFrom ggplot2 scale_x_continuous
+#' @importFrom ggplot2 theme
 #' @importFrom RJDBC JDBC
 #' @importFrom DBI dbConnect
 #' @importFrom DBI dbSendQuery
