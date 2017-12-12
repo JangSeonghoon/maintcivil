@@ -53,7 +53,20 @@ inspect=function(order){
                     paste0("select V4,V8,V9 FROM TEMPORARY WHERE V1=",order))
       d=dbFetch(rs)
 
-      kind=str_c(unlist(str_split(d[1,1],pattern = " ")),collapse="")
+      rs=dbSendQuery(conn,
+                     paste0("select V4 FROM TEMPORARY"))
+
+      kind=ifelse(d[1,1]=="ALIGNMENT LEFT","ALL10M",
+                  ifelse(d[1,1]=="ALIGNMENT RIGHT","ALR10M",
+                         ifelse(d[1,1]=="PROFILE LEFT","PRL10M",
+                                ifelse(d[1,1]=="PRFILE RIGHT","PRR10M",
+                                       ifelse(d[1,1]=="PRFILE LEFT","PRL10M",
+                                              ifelse(d[1,1]=="TWIST 3M","TWIST3M","SUP"))
+                                       )
+                                )
+                         )
+                  )
+
       except=as.numeric(d[,3])
 
       max=as.numeric(d[,2])
@@ -166,7 +179,6 @@ inspect=function(order){
         ggsave("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/html/graph/inspect.jpg",
                width=20,height=14,units=c("cm"))
         print(except)
-
 
     }#fun
   )#cmpfun
