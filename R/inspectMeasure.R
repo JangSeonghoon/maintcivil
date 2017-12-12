@@ -92,7 +92,8 @@ inspect=function(order){
 
       j=1;for(j in 1:3){
         k=5-j
-        memory=integer(0)
+        memory=1
+
         cor2=10000
         i=1;for(i in 1:100){
           if(i!=1) {cor2=ifelse(cor1<cor2,cor1,cor2)}
