@@ -145,8 +145,6 @@ inspect=function(order){
       #####################################################################
 
       inspect_3=inspect_2 %>% filter(LOCATION>=(except-0.02)*1000,LOCATION<=(except+0.02)*1000)
-
-      max=-3
       a=which(inspect_3[,1]==except*1000)
       b=ifelse(max<0,which(inspect_3[,5]==min(inspect_3[,5])),which(inspect_3[,5]==max(inspect_3[,5])))
       c=a-b
