@@ -99,8 +99,10 @@ rail_info=function(distance,workspace_no){
         print(a[no,])
         names(string)=string_name
         string_name<<-string_name
+        string<<-string
       }
-      string<<-string
+      # string[[order]]=data.frame(name=names(string))
+
     }#function
   )#cmpfun
   A()
