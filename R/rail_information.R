@@ -105,15 +105,15 @@ rail_info=function(distance,workspace_no){
         string<<-string
       }
       "bridge"
-      str_replace_all(names(string),"(railInfo_L)","레일(좌)")
-      str_replace_all(names(string),"(railInfo_R)","레일(우)")
-      str_replace_all(names(string),"(platform)","승강장")
-      str_replace_all(names(string),"(gugyo)","구교")
-      str_replace_all(names(string),"(curve)","곡선")
-      str_replace_all(names(string),"(steep)","구배")
-      str_replace_all(names(string),"(wall)","옹벽")
-      str_replace_all(names(string),"(sewage)","하수")
-      str_replace_all(names(string),"(bridge)","교량")
+      names(string)=str_replace_all(names(string),"(railInfo_L)","레일(좌)")
+      names(string)=str_replace_all(names(string),"(railInfo_R)","레일(우)")
+      names(string)=str_replace_all(names(string),"(platform)","승강장")
+      names(string)=str_replace_all(names(string),"(gugyo)","구교")
+      names(string)=str_replace_all(names(string),"(curve)","곡선")
+      names(string)=str_replace_all(names(string),"(steep)","구배")
+      names(string)=str_replace_all(names(string),"(wall)","옹벽")
+      names(string)=str_replace_all(names(string),"(sewage)","하수")
+      names(string)=str_replace_all(names(string),"(bridge)","교량")
       string[[order]]=data.frame(name=names(string))
       string<<-string
     }#function
