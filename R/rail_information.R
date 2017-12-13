@@ -4,6 +4,7 @@
 #' @return
 devtools::use_package("RJDBC")
 devtools::use_package("DBI")
+devtools::use_package("stringr")
 
 #' @importFrom compiler cmpfun
 #' @importFrom RJDBC JDBC
@@ -14,6 +15,7 @@ devtools::use_package("DBI")
 #' @importFrom DBI dbHasCompleted
 #' @importFrom DBI dbWriteTable
 #' @importFrom DBI dbDisconnect
+#' @importFrom stringr str_replace_all
 #' @export
 
 rail_info=function(distance,workspace_no){
@@ -22,7 +24,7 @@ rail_info=function(distance,workspace_no){
       workspace=floor(workspace_no/100)*100
       dista=distance*1000
 
-      load("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/RData/DB(utf8).RData")
+        load("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/RData/DB(utf8).RData")
       listDB=c(
         paste0("bridge_",workspace), paste0("sewage_",workspace), paste0("wall_",workspace),
         paste0("steep_",workspace),  paste0("curve_",workspace),  paste0("gugyo_",workspace),
@@ -102,6 +104,16 @@ rail_info=function(distance,workspace_no){
         string_name<<-string_name
         string<<-string
       }
+      "bridge"
+      str_replace_all(names(string),"(railInfo_L)","레일(좌)")
+      str_replace_all(names(string),"(railInfo_R)","레일(우)")
+      str_replace_all(names(string),"(platform)","승강장")
+      str_replace_all(names(string),"(gugyo)","구교")
+      str_replace_all(names(string),"(curve)","곡선")
+      str_replace_all(names(string),"(steep)","구배")
+      str_replace_all(names(string),"(wall)","옹벽")
+      str_replace_all(names(string),"(sewage)","하수")
+      str_replace_all(names(string),"(bridge)","교량")
       string[[order]]=data.frame(name=names(string))
       string<<-string
     }#function
