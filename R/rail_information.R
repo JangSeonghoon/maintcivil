@@ -100,7 +100,6 @@ rail_info=function(distance,workspace_no){
         names(string)=string_name
         string_name<<-string_name
       }
-      string[[order]]=names(string)
       string<<-string
     }#function
   )#cmpfun
