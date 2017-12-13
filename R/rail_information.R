@@ -90,16 +90,18 @@ rail_info=function(distance,workspace_no){
           colna=colnames(a[no,])
           colnames(a[no,])=""
           string[[order]]=data.frame(column=colna,value=(t(a[no,]))[,1])
+          string[[order]]=sapply(string[[order]],as.character)
+          rownames(string[[order]])=NULL
           string_name[order]=name[db]
           order=order+1
         }
-
         print(db)
         print(a[no,])
         names(string)=string_name
-        string<<-string
         string_name<<-string_name
       }
+      string[[order]]=names(string)
+      string<<-string
     }#function
   )#cmpfun
   A()
