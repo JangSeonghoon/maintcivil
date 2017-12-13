@@ -91,6 +91,7 @@ rail_info=function(distance,workspace_no){
           colnames(a[no,])=""
           string[[order]]=data.frame(column=colna,value=(t(a[no,]))[,1])
           string[[order]]=sapply(string[[order]],as.character)
+          string[[order]]=as.data.frame(string[[order]])
           rownames(string[[order]])=NULL
           string_name[order]=name[db]
           order=order+1
