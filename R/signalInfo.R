@@ -29,7 +29,7 @@ str_detect(compareSet,startT)*
   str_detect(compareSet,kind)==1
 )[1]
 
-compare[no,5]
+return(compare[no,5])
 }
 )
 A()
