@@ -13,6 +13,11 @@ signal=function(workspace_no,startT,lastT,direction,order,kind){
 A=cmpfun(
 function(){
 
+startT=as.character(startT)
+lastT=as.character(lastT)
+direction=as.character(direction)
+kind=as.character(kind)
+
 workspace_no=floor(workspace_no/100)*100
 
 load("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/RData/DB(utf8).RData")
