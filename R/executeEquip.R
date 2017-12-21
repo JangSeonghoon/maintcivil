@@ -16,7 +16,7 @@ devtools::use_package("RJDBC")
 #' @importFrom DBI dbDisconnect
 
 #' @export
-executeManual=function(num,year,quater,workspace_no){
+executeEquip=function(num,year,quater,workspace_no){
   A=cmpfun(
     function(){
 
@@ -24,7 +24,7 @@ executeManual=function(num,year,quater,workspace_no){
       conn=dbConnect(drv,"jdbc:oracle:thin:@localhost:1521:xe","korail150773","0818")
       quater=ifelse(length(quater)==1,paste0("0",quater),quater)
       # rs=dbSendQuery(conn,paste0("select * from TQI",year,"_",quater,"_",workspace_no,"_BACKUP"))
-      rs=dbSendQuery(conn,paste0("select * from INSPECTRS",year,quater))
+      rs=dbSendQuery(conn,paste0("select * from TQI",year,"_",quater,"_",workspace_no))
       result=dbFetch(rs)
 
       rs1=dbSendQuery(conn,"select * from temporary")
