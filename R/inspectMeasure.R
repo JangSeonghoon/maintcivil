@@ -174,7 +174,7 @@ inspect=function(order){
               axis.title.x=element_text(size=15, face="bold"),
               axis.text.y=element_text(size=15, face="bold"),
               axis.title.y=element_text(size=15, face="bold"))
-        ggsave("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/html/graph/inspect.jpg",
+        ggsave("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/html/inspect.jpg",
                width=20,height=14,units=c("cm"))
         print(except)
 
