@@ -43,7 +43,7 @@ db[,"INSPECTDATE"]=as.Date(db[,"INSPECTDATE"])
 drv=JDBC("oracle.jdbc.driver.OracleDriver","/home/jsh/Downloads/ojdbc6.jar")
 conn=dbConnect(drv,"jdbc:oracle:thin:@localhost:1521:xe","korail150773","0818")
 
-dbName=paste0("INSPECTRS",year,quater)
+dbName=paste0("INSPECTRS",year,quater,"_",workspace_no)
 dbWriteTable(conn,
              dbName,
              db)

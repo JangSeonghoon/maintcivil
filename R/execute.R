@@ -5,6 +5,7 @@
 devtools::use_package("rJava")
 devtools::use_package("DBI")
 devtools::use_package("RJDBC")
+devtoosl::use_package("stringr")
 #' @importFrom compiler cmpfun
 #' @importFrom RJDBC JDBC
 #' @importFrom DBI dbConnect
@@ -14,6 +15,7 @@ devtools::use_package("RJDBC")
 #' @importFrom DBI dbHasCompleted
 #' @importFrom DBI dbWriteTable
 #' @importFrom DBI dbDisconnect
+#' @importFrom stringr str_dect
 
 #' @export
 executeManual=function(num,year,quater,workspace_no){
@@ -23,60 +25,33 @@ executeManual=function(num,year,quater,workspace_no){
       drv=JDBC("oracle.jdbc.driver.OracleDriver","/home/jsh/Downloads/ojdbc6.jar")
       conn=dbConnect(drv,"jdbc:oracle:thin:@localhost:1521:xe","korail150773","0818")
       quater=ifelse(length(quater)==1,paste0("0",quater),quater)
-      # rs=dbSendQuery(conn,paste0("select * from TQI",year,"_",quater,"_",workspace_no,"_BACKUP"))
+      # rs=dbSendQuery(conn,paste0("select * from INSPECTRS",year,quater,"_BACKUP"))
       rs=dbSendQuery(conn,paste0("select * from INSPECTRS",year,quater))
       result=dbFetch(rs)
 
-      rs1=dbSendQuery(conn,"select * from temporary")
-      result2=dbFetch(rs1)
+      desc=dbSendQuery(conn,"select * from tab")
+      desc=dbFetch(desc)
+
+      temp=dbSendQuery(conn,"select * from temporary")
+      temp=dbFetch(temp)
+
+      compare=temp[num,9]
+
+      result
 
 
-      i=1;for(i in 1:length(num)){
-        num[i]=as.integer(num[i])
-        startD=result2[num[i],2]
-        lastD=result2[num[i],3]
-
-        TV_1=-3
-        TV_2=11
-        WV_1=-3
-        WV_2=17
-        AV_1=-5
-        AV_2=20
-        SV_1=-10
-        SV_2=35
-
-        result[result$DISTANCE>=startD&result$DISTANCE<=lastD,3]=
-          ifelse(
-            result[result$DISTANCE>=startD&result$DISTANCE<=lastD,3]<=AV_1,TV_1,
-            ifelse(
-              result[result$DISTANCE>=startD&result$DISTANCE<=lastD,3]>=AV_2,TV_2,
-              result[result$DISTANCE>=startD&result$DISTANCE<=lastD,3]
-            )
-          )
-
-        TV_v=c(4,4,4,4,3,3)
-        WV_v=c(8,8,7,7,10,8)
-        AV_v=c(13,13,9,9,20,10)
-        SV_v=c(20,20,17,17,0,21)
-        column=c(6,9,12,15,18,21)
-
-        j=1;for(j in 1:length(column)){
-          result[result$DISTANCE>=startD&result$DISTANCE<=lastD,(column[j])]=
-            ifelse(
-              result[result$DISTANCE>=startD&result$DISTANCE<=lastD,(column[j])]<=AV_v[j]*(-1),TV_v[j]*(-1),
-            ifelse(
-              result[result$DISTANCE>=startD&result$DISTANCE<=lastD,(column[j])]>=AV_v[j],TV_v[j],
-              result[result$DISTANCE>=startD&result$DISTANCE<=lastD,(column[j])]
-            )
-          )
-
-        }
+      if(
+      sum(str_detect(desc[,1],paste0("INSPECTRS",year,quater,"_BACKUP")))==0
+      ){
+        dbWriteTable(conn,paste0("INSPECTRS",year,quater,"_BACKUP"),result)
       }
 
-  print("db")
-         # try(rs<-dbExecute(conn,paste0("drop table TQI",year,"_",quater,"_",workspace_no)),
-         #     silent=T)
-         # dbHasCompleted(rs)
+
+
+
+         try(rs<-dbExecute(conn,paste0("drop INSPECTRS",year,quater)),
+             silent=T)
+         dbHasCompleted(rs)
 
         # qry=sqlAppendTable(conn,paste0("TQI",year,"_",quater,"_",workspace_no),result,row.names=F)
 

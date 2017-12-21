@@ -58,7 +58,7 @@ notify_chart=function(year,quater,workspace_no,carKind,order){
       quater=ifelse(length(quater)==1,paste0("0",quater),quater)
       year=as.integer(year)
 
-      rs=dbSendQuery(conn,paste0("select * from inspectRS",year,quater, " where workspace='",workspace_no,"'"))
+      rs=dbSendQuery(conn,paste0("select * from inspectRS",year,quater,"_",workspace_no))
       temp=dbFetch(rs)
 
       j=1;for(j in 1:length(temp)){
