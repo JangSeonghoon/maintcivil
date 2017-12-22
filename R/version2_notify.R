@@ -129,8 +129,8 @@ notify_ver=function(year,quater,workspace_no,carKind){
 
 
       test=caution[,c(9,4,8)]
-      start=min(caution$STARTD)
-      last=max(caution$LASTD)
+      start=min(caution$STARTD)-1
+      last=max(caution$LASTD)+1
       test=rbind(test,data.frame(EXCEPT=rep(start,7),PARAMETER=c("GAGE","PROFILE LEFT","PROFILE RIGHT","ALIGNMENT LEFT","ALIGNMENT RIGHT","SUP","TWIST 3M"),MAX=rep(0,7)))
       n=(last-start)/0.001+1
       LOCATION=start+0.001*((1:n)-1)
