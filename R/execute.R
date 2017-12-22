@@ -15,7 +15,7 @@ devtools::use_package("stringr")
 #' @importFrom DBI dbHasCompleted
 #' @importFrom DBI dbWriteTable
 #' @importFrom DBI dbDisconnect
-#' @importFrom stringr str_dect
+#' @importFrom stringr str_detect
 
 #' @export
 executeManual=function(num,year,quater,workspace_no){
