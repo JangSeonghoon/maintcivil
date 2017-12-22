@@ -36,9 +36,11 @@ coltypes=map.coltypes(
   paste0("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/RData/",workspace_no,"_",year,quater,".csv"),header=T)
 db=csvread(
   paste0("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/RData/",workspace_no,"_",year,quater,".csv"),coltypes=coltypes,header=T)
-db=db %>% select("PARAMETER","EXCEPT","MAX","시점","종점","불량","차종","검측일자","분기여부","플랜트","작업장")
+class(db)
+db=db %>% dplyr::select(17,19,18,14,15,16,1,6,2,7,8)
 names(db)=c("PARAMETER","EXCEPT","MAX","STARTD","LASTD","LEN","CARKIND","INSPECTDATE","SWITCH","PLANT","WORKSPACE")
 db[,"INSPECTDATE"]=as.Date(db[,"INSPECTDATE"])
+db
 
 drv=JDBC("oracle.jdbc.driver.OracleDriver","/home/jsh/Downloads/ojdbc6.jar")
 conn=dbConnect(drv,"jdbc:oracle:thin:@localhost:1521:xe","korail150773","0818")
