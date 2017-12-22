@@ -5,7 +5,7 @@
 devtools::use_package("rJava")
 devtools::use_package("DBI")
 devtools::use_package("RJDBC")
-devtoosl::use_package("stringr")
+devtools::use_package("stringr")
 #' @importFrom compiler cmpfun
 #' @importFrom RJDBC JDBC
 #' @importFrom DBI dbConnect

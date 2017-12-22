@@ -1,11 +1,3 @@
-dpkg=c("RJDBC","dplyr","csvread")
-sapply(dpkg,require,character.only=T)
-
-#param
-workspace_no=42423
-year=2017
-quater=4
-
 #'
 #' create Inspect Table
 #'
@@ -36,8 +28,8 @@ coltypes=map.coltypes(
   paste0("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/RData/",workspace_no,"_",year,quater,".csv"),header=T)
 db=csvread(
   paste0("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/RData/",workspace_no,"_",year,quater,".csv"),coltypes=coltypes,header=T)
-class(db)
-db=db %>% dplyr::select(17,19,18,14,15,16,1,6,2,7,8)
+
+db=db %>% select(17,19,18,14,15,16,1,6,2,7,8)
 names(db)=c("PARAMETER","EXCEPT","MAX","STARTD","LASTD","LEN","CARKIND","INSPECTDATE","SWITCH","PLANT","WORKSPACE")
 db[,"INSPECTDATE"]=as.Date(db[,"INSPECTDATE"])
 db
