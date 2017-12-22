@@ -92,9 +92,12 @@ notify_ver=function(year,quater,workspace_no,carKind){
       remnant=deadline-Sys.Date()
       remnant_alert=ifelse(remnant<0,paste0(remnant*(-1),"일 지남"),
                      ifelse(remnant==0,"D-DAY",paste0(remnant,"일 남음")))
+      remnant_seq=as.numeric(remnant)
       remnant=as.character(remnant)
       len=length(temp)
-      temp=temp %>% mutate(deadline,remnant,remnant_alert,seq) %>% arrange(seq,STARTD) %>% select(1:(len+3))
+      temp=temp %>% mutate(deadline,remnant,remnant_alert,seq,remnant_seq) %>%
+        arrange(remnant_seq) %>%
+        select(1:(len+3))
 
       caution=temp %>% select(8,12,1,4,5,6,3,2,9,14,13)
       caution=cbind(seq=seq(caution[,3]),caution)
