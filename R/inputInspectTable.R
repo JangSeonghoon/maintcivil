@@ -49,6 +49,9 @@ dbWriteTable(conn,
              dbName,
              db)
 dbDisconnect(conn)
+}else{
+
+
 }
 }#function
 )#cmpfun

@@ -57,13 +57,18 @@ notify_ver=function(year,quater,workspace_no,carKind){
       quater=ifelse(length(quater)==1,paste0("0",quater),quater)
       year=as.integer(year)
 
-      rs=dbSendQuery(conn,paste0("select * from inspectRS",year,quater,"_",workspace_no))
+      try(rs<-dbSendQuery(conn,paste0("select * from inspectRS",year,quater,"_",workspace_no)),
+        silent=T
+      )
+
       temp=dbFetch(rs)
+
+      if(temp[,1]!=0){
 
       j=1;for(j in 1:length(temp)){
         temp[,j]=str_replace_all(temp[,j],"(\")","")
       }
-      
+
       car=ifelse(carKind==1,"궤도검측차","종합검측차")
       temp=temp[temp$CARKIND==car,]
       i=c(2,3,4,5,6,10,11)
@@ -189,7 +194,11 @@ notify_ver=function(year,quater,workspace_no,carKind){
       #   saveWidget(p1,name)
       #   print(i)
       # }
-
+      }else{
+        try(rs<-dbExecute(conn,"drop table temporary"),
+            silent=T)
+        dbHasCompleted(rs)
+      }
     }#function
   )#cmpfun
   A()
