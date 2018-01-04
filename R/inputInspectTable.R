@@ -29,6 +29,7 @@ coltypes=map.coltypes(
 db=csvread(
   paste0("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/RData/",workspace_no,"_",year,quater,".csv"),coltypes=coltypes,header=T)
 
+if(length(db[,1])!=0){
 DIRECTION=
 sapply(db[,5],function(x)
   str_sub(x,nchar(x)-4,nchar(x))
@@ -36,7 +37,8 @@ sapply(db[,5],function(x)
 
 db=db %>% select(17,19,18,14,15,16,1,6,2,7,8)
 names(db)=c("PARAMETER","EXCEPT","MAX","STARTD","LASTD","LEN","CARKIND","INSPECTDATE","SWITCH","PLANT","WORKSPACE")
-db[,"INSPECTDATE"]=as.Date(db[,"INSPECTDATE"])
+
+db[,"INSPECTDATE"]=ifelse(db[,"INSPECTDATE"]!=NULL,as.Date(db[,"INSPECTDATE"]),)
 db=db %>% mutate("DIRECTION"=DIRECTION)
 
 drv=JDBC("oracle.jdbc.driver.OracleDriver","/home/jsh/Downloads/ojdbc6.jar")
@@ -47,7 +49,7 @@ dbWriteTable(conn,
              dbName,
              db)
 dbDisconnect(conn)
-
+}
 }#function
 )#cmpfun
 A()
