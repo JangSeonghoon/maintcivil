@@ -63,6 +63,7 @@ notify_ver=function(year,quater,workspace_no,carKind){
       j=1;for(j in 1:length(temp)){
         temp[,j]=str_replace_all(temp[,j],"(\")","")
       }
+      
       car=ifelse(carKind==1,"궤도검측차","종합검측차")
       temp=temp[temp$CARKIND==car,]
       i=c(2,3,4,5,6,10,11)
@@ -99,7 +100,7 @@ notify_ver=function(year,quater,workspace_no,carKind){
         arrange(remnant_seq) %>%
         select(1:(len+3))
 
-      caution=temp %>% select(8,12,1,4,5,6,3,2,9,14,13)
+      caution=temp %>% select(8,13,1,4,5,6,3,2,9,15,14,12)
       caution=cbind(seq=seq(caution[,3]),caution)
 
       ########################################
