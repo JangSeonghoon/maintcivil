@@ -38,26 +38,38 @@ devtools::use_package("htmlwidgets")
 #' @importFrom stats HoltWinters
 #' @importFrom htmlwidgets saveWidget
 #' @export
-tqi_trend=function(distance){
+tqi_trend=function(distance,kind){
+
+  rm(list=ls())
+  load("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/RData/inspect.RData")
+  inspect_file=ls()[(length(ls())-9):length(ls())]
+
+  kind_no=ifelse(kind=="GAGE",3,
+                 ifelse(kind=="PRL10M",4,
+                        ifelse(kind=="PRR10M",5,
+                               ifelse(kind=="ALL10M",6,
+                                      ifelse(kind=="ALR10M",7,
+                                             ifelse(kind=="SUP",8,
+                                                    ifelse(kind=="TWIST3M",9,0)))))))
   len=distance
   len1=len*10
   len2=floor(len1)
 
-  if((len2)%%2==0){
+  if((len2)%%2!=0){
     startD=(len2-1)*100
     lastD=startD+200
   }else{
-    startD=startD*100
+    startD=len2*100
     lastD=startD+200
   }
 
   round((len*1000)/100,digit=0)
 
-  drv=JDBC("oracle.jdbc.driver.OracleDriver","/home/jsh/Download/ojdbc6.jar")
-  conn=dbConnect(drv,"jdbc:oracle:thin:@localhost:1521:xe","korail150773","0818")
+  # drv=JDBC("oracle.jdbc.driver.OracleDriver","/home/jsh/Download/ojdbc6.jar")
+  # conn=dbConnect(drv,"jdbc:oracle:thin:@localhost:1521:xe","korail150773","0818")
+  # rs=dbSendQuery(conn,"select * from PRACTICE_CHART")
+  # inspect=dbFetch(rs)
 
-  rs=dbSendQuery(conn,"select * from PRACTICE_CHART")
-  inspect=dbFetch(rs)
   names(inspect)=str_replace_all(names(inspect),"\"","")
   names(inspect)[1]="distance"
   inspect_backup=inspect

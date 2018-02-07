@@ -61,9 +61,10 @@ notify_chart=function(year,quater,workspace_no,carKind,order){
       rs=dbSendQuery(conn,paste0("select * from inspectRS",year,quater,"_",workspace_no))
       temp=dbFetch(rs)
 
-      j=1;for(j in 1:length(temp)){
-        temp[,j]=str_replace_all(temp[,j],"(\")","")
-      }
+      temp=apply(temp,2,function(x)
+        str_replace_all(x,"(\")",""))
+      temp=as.data.frame(temp)
+      
       car=ifelse(carKind==1,"궤도검측차","종합검측차")
       temp=temp[temp$CARKIND==car,]
       i=c(2,3,4,5,6,10,11)
@@ -77,7 +78,7 @@ notify_chart=function(year,quater,workspace_no,carKind,order){
 
       seq=integer(0)
       deadline=temp[,8]
-
+      
       i=1;for(i in 1:length(temp[,1])){
         if(str_detect(temp[i,1],"TWIST")){
           seq[i]=1
@@ -106,12 +107,19 @@ notify_chart=function(year,quater,workspace_no,carKind,order){
       test=caution[,c(9,4,8)]
       start=min(caution$STARTD)-1
       last=max(caution$LASTD)+1
-      test=rbind(test,data.frame(EXCEPT=rep(start,7),PARAMETER=c("GAGE","PROFILE LEFT","PROFILE RIGHT","ALIGNMENT LEFT","ALIGNMENT RIGHT","SUP","TWIST 3M"),MAX=rep(0,7)))
+      test=rbind(test,data.frame(EXCEPT=rep(start,7),
+                                 PARAMETER=c("GAGE","PROFILE LEFT","PROFILE RIGHT","ALIGNMENT LEFT","ALIGNMENT RIGHT","SUP","TWIST 3M"),
+                                 MAX=rep(0,7)))
       n=(last-start)/0.001+1
       LOCATION=start+0.001*((1:n)-1)
       names(test)[1]="LOCATION"
-      test=test %>% group_by(PARAMETER, LOCATION) %>% mutate(ind=row_number()) %>% spread("PARAMETER","MAX")
+      test=test %>% 
+        group_by(PARAMETER, LOCATION) %>%
+        mutate(ind=row_number()) %>% 
+        spread("PARAMETER","MAX")
+      
       test=as.data.frame(test)
+      
       i=1;for(i in 1:length(test)){
         test[is.na(test[,i]),i]=0
         print(i)
