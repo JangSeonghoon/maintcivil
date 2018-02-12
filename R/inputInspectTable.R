@@ -23,11 +23,20 @@ createInspect=function(year,quater,workspace_no){
 A=cmpfun(
 function(){
 
+  if(Sys.info()['sysname']=="Windows"){
+    path=
+      paste0(
+        Sys.getenv("CATALINA_HOME"),"/webapps/bigTeam/"
+      )
+  }else if(Sys.info()['sysname']=="Linux"){
+    path="/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/"
+  }
+
 quater=ifelse(nchar(quater)==1,paste0("0",quater),quater)
 coltypes=map.coltypes(
-  paste0("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/RData/",workspace_no,"_",year,quater,".csv"),header=T)
+  paste0(path,"RData/",workspace_no,"_",year,quater,".csv"),header=T)
 db=csvread(
-  paste0("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/RData/",workspace_no,"_",year,quater,".csv"),coltypes=coltypes,header=T)
+  paste0(path,"RData/",workspace_no,"_",year,quater,".csv"),coltypes=coltypes,header=T)
 
 if(length(db[,1])!=0){
 DIRECTION=
@@ -38,11 +47,15 @@ sapply(db[,5],function(x)
 db=db %>% select(17,19,18,14,15,16,1,6,2,7,8)
 names(db)=c("PARAMETER","EXCEPT","MAX","STARTD","LASTD","LEN","CARKIND","INSPECTDATE","SWITCH","PLANT","WORKSPACE")
 
-db[,"INSPECTDATE"]=ifelse(db[,"INSPECTDATE"]!=NULL,as.Date(db[,"INSPECTDATE"]),)
+db$INSPECTDATE=db$INSPECTDATE %>% as.Date()
 db=db %>% mutate("DIRECTION"=DIRECTION)
 
-drv=JDBC("oracle.jdbc.driver.OracleDriver","/home/jsh/Downloads/ojdbc6.jar")
+drv=JDBC("oracle.jdbc.driver.OracleDriver",paste0(path,"driver/ojdbc6.jar"))
 conn=dbConnect(drv,"jdbc:oracle:thin:@localhost:1521:xe","korail150773","0818")
+
+try(rs<-dbExecute(conn,paste0("drop table INSPECTRS",year,quater,"_",workspace_no)),
+    silent=T)
+dbHasCompleted(rs)
 
 dbName=paste0("INSPECTRS",year,quater,"_",workspace_no)
 dbWriteTable(conn,

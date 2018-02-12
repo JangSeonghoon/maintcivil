@@ -38,38 +38,36 @@ devtools::use_package("htmlwidgets")
 #' @importFrom stats HoltWinters
 #' @importFrom htmlwidgets saveWidget
 #' @export
-tqi_trend=function(distance,kind){
+tqi_trend=function(distance){
 
-  rm(list=ls())
-  load("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/RData/inspect.RData")
-  inspect_file=ls()[(length(ls())-9):length(ls())]
+  if(Sys.info()['sysname']=="Windows"){
+    path=
+      paste0(
+        Sys.getenv("CATALINA_HOME"),"/webapps/bigTeam/"
+      )
+  }else if(Sys.info()['sysname']=="Linux"){
+    path="/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/"
+  }
 
-  kind_no=ifelse(kind=="GAGE",3,
-                 ifelse(kind=="PRL10M",4,
-                        ifelse(kind=="PRR10M",5,
-                               ifelse(kind=="ALL10M",6,
-                                      ifelse(kind=="ALR10M",7,
-                                             ifelse(kind=="SUP",8,
-                                                    ifelse(kind=="TWIST3M",9,0)))))))
   len=distance
   len1=len*10
   len2=floor(len1)
 
-  if((len2)%%2!=0){
+  if((len2)%%2==0){
     startD=(len2-1)*100
     lastD=startD+200
   }else{
-    startD=len2*100
+    startD=startD*100
     lastD=startD+200
   }
 
   round((len*1000)/100,digit=0)
 
-  # drv=JDBC("oracle.jdbc.driver.OracleDriver","/home/jsh/Download/ojdbc6.jar")
-  # conn=dbConnect(drv,"jdbc:oracle:thin:@localhost:1521:xe","korail150773","0818")
-  # rs=dbSendQuery(conn,"select * from PRACTICE_CHART")
-  # inspect=dbFetch(rs)
+  drv=JDBC("oracle.jdbc.driver.OracleDriver",paste0(path,"driver/ojdbc6.jar"))
+  conn=dbConnect(drv,"jdbc:oracle:thin:@localhost:1521:xe","korail150773","0818")
 
+  rs=dbSendQuery(conn,"select * from PRACTICE_CHART")
+  inspect=dbFetch(rs)
   names(inspect)=str_replace_all(names(inspect),"\"","")
   names(inspect)[1]="distance"
   inspect_backup=inspect
@@ -161,7 +159,7 @@ tqi_trend=function(distance,kind){
   (hw=HoltWinters(demand,seasonal="additive"))
   A<-forecast(hw,h=4)
   A<<-A
-  saveWidget(hchart(forecast(hw,h=4)),"/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/html/tqi_trend.html")
+
+  saveWidget(hchart(forecast(hw,h=4)),paste0(path,"html/tqi_trend.html"))
 
 }#function
-

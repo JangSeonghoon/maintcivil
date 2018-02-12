@@ -13,6 +13,16 @@ signal=function(workspace_no,startT,lastT,direction,order,kind){
 A=cmpfun(
 function(){
 
+  if(Sys.info()['sysname']=="Windows"){
+    path=
+      paste0(
+        Sys.getenv("CATALINA_HOME"),"/webapps/bigTeam/"
+      )
+  }else if(Sys.info()['sysname']=="Linux"){
+    load("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/")
+  }
+
+
 startT=as.character(startT)
 lastT=as.character(lastT)
 direction=as.character(direction)
@@ -20,7 +30,9 @@ kind=as.character(kind)
 
 workspace_no=floor(workspace_no/100)*100
 
-load("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/RData/DB(utf8).RData")
+
+load(path,"RData/DB(utf8).RData")
+
 
 compare=eval(parse(text=paste0("signal_",workspace_no)))
 

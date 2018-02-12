@@ -52,7 +52,16 @@ notify_chart=function(year,quater,workspace_no,carKind,order){
   A=cmpfun(
     function(){
 
-      drv=JDBC("oracle.jdbc.driver.OracleDriver","/home/jsh/Downloads/ojdbc6.jar")
+      if(Sys.info()['sysname']=="Windows"){
+        path=
+          paste0(
+            Sys.getenv("CATALINA_HOME"),"/webapps/bigTeam/"
+          )
+      }else if(Sys.info()['sysname']=="Linux"){
+        path="/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/"
+      }
+
+      drv=JDBC("oracle.jdbc.driver.OracleDriver",paste0(path,"driver/ojdbc6.jar"))
       conn=dbConnect(drv,"jdbc:oracle:thin:@localhost:1521:xe","korail150773","0818")
 
       quater=ifelse(length(quater)==1,paste0("0",quater),quater)
@@ -61,10 +70,10 @@ notify_chart=function(year,quater,workspace_no,carKind,order){
       rs=dbSendQuery(conn,paste0("select * from inspectRS",year,quater,"_",workspace_no))
       temp=dbFetch(rs)
 
-      temp=apply(temp,2,function(x)
-        str_replace_all(x,"(\")",""))
-      temp=as.data.frame(temp)
-      
+      j=1;for(j in 1:length(temp)){
+        temp[,j]=str_replace_all(temp[,j],"(\")","")
+      }
+
       car=ifelse(carKind==1,"궤도검측차","종합검측차")
       temp=temp[temp$CARKIND==car,]
       i=c(2,3,4,5,6,10,11)
@@ -78,7 +87,7 @@ notify_chart=function(year,quater,workspace_no,carKind,order){
 
       seq=integer(0)
       deadline=temp[,8]
-      
+
       i=1;for(i in 1:length(temp[,1])){
         if(str_detect(temp[i,1],"TWIST")){
           seq[i]=1
@@ -113,13 +122,13 @@ notify_chart=function(year,quater,workspace_no,carKind,order){
       n=(last-start)/0.001+1
       LOCATION=start+0.001*((1:n)-1)
       names(test)[1]="LOCATION"
-      test=test %>% 
+      test=test %>%
         group_by(PARAMETER, LOCATION) %>%
-        mutate(ind=row_number()) %>% 
+        mutate(ind=row_number()) %>%
         spread("PARAMETER","MAX")
-      
+
       test=as.data.frame(test)
-      
+
       i=1;for(i in 1:length(test)){
         test[is.na(test[,i]),i]=0
         print(i)
@@ -163,7 +172,7 @@ notify_chart=function(year,quater,workspace_no,carKind,order){
           yaxis = list(title = "INSPECT"))
 
          p1=p %>% layout(xaxis=list(range=c(caution[order,9]-0.004,caution[order,9]+0.004)))
-         name=paste0("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/html/segment.html")
+         name=paste0(path,"html/segment.html")
          saveWidget(p1,name)
 
     }#function

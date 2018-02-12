@@ -21,10 +21,21 @@ devtools::use_package("stringr")
 rail_info=function(distance,workspace_no){
   A=cmpfun(
     function(){
+
+      if(Sys.info()['sysname']=="Windows"){
+        path=
+          paste0(
+            Sys.getenv("CATALINA_HOME"),"/webapps/bigTeam/"
+          )
+      }else if(Sys.info()['sysname']=="Linux"){
+        path="/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/"
+      }
+
       workspace=floor(workspace_no/100)*100
       dista=distance*1000
 
-        load("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/RData/DB(utf8).RData")
+      load(paste0(path,"RData/DB(utf8).RData"))
+
       listDB=c(
         paste0("bridge_",workspace), paste0("sewage_",workspace), paste0("wall_",workspace),
         paste0("steep_",workspace),  paste0("curve_",workspace),  paste0("gugyo_",workspace),

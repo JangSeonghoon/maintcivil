@@ -44,10 +44,20 @@ inspect=function(order){
   A=cmpfun(
     function(){
       rm(list=ls())
-      load("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/RData/inspect.RData")
+
+      if(Sys.info()['sysname']=="Windows"){
+        path=
+          paste0(
+            Sys.getenv("CATALINA_HOME"),"/webapps/bigTeam/"
+          )
+      }else if(Sys.info()['sysname']=="Linux"){
+        path="/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/"
+      }
+
+      load(paste0(path,"RData/inspect.RData"))
       inspect_file=ls()[(length(ls())-3):length(ls())]
 
-      drv=JDBC("oracle.jdbc.driver.OracleDriver","/home/jsh/Download/ojbc6.jar")
+      drv=JDBC("oracle.jdbc.driver.OracleDriver",paste0(path,"driver/ojbc6.jar"))
       conn=dbConnect(drv,"jdbc:oracle:thin:@localhost:1521:xe","korail150773","0818")
       rs=dbSendQuery(conn,
                     paste0("select V4,V8,V9 FROM TEMPORARY WHERE V1=",order))
@@ -174,7 +184,7 @@ inspect=function(order){
               axis.title.x=element_text(size=15, face="bold"),
               axis.text.y=element_text(size=15, face="bold"),
               axis.title.y=element_text(size=15, face="bold"))
-        ggsave("/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/html/inspect.jpg",
+        ggsave(paste(path,"html/inspect.jpg"),
                width=20,height=14,units=c("cm"))
         print(except)
 

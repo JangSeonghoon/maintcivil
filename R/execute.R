@@ -18,63 +18,71 @@ devtools::use_package("stringr")
 #' @importFrom stringr str_detect
 
 #' @export
-executeManual=function(num,year,quater,workspace_no){
+executeManual=function(num,year,quater,workspace_no,direct){
   A=cmpfun(
     function(){
 
-      drv=JDBC("oracle.jdbc.driver.OracleDriver","/home/jsh/Downloads/ojdbc6.jar")
+      if(Sys.info()['sysname']=="Windows"){
+        path=
+          paste0(
+            Sys.getenv("CATALINA_HOME"),"/webapps/bigTeam/"
+          )
+      }else if(Sys.info()['sysname']=="Linux"){
+        path="/home/jsh/eclipse-workspace/bigTeam/src/main/webapp/"
+      }
+
+      direct=as.integer(direct)
+      direction=c("MM101","MM102","MM103","MM201","MM202","MM203","MM")
+
+      drv=JDBC("oracle.jdbc.driver.OracleDriver",paste0(path,"driver/ojdbc6.jar"))
       conn=dbConnect(drv,"jdbc:oracle:thin:@localhost:1521:xe","korail150773","0818")
       quater=ifelse(length(quater)==1,paste0("0",quater),quater)
-      # rs=dbSendQuery(conn,paste0("select * from INSPECTRS",year,quater,"_BACKUP"))
-      rs=dbSendQuery(conn,paste0("select * from INSPECTRS",year,quater))
+      # rs=dbSendQuery(conn,paste0("select * from INSPECTRS",year,quater,"_",workspace_no,"_BACKUP"))
+      rs=dbSendQuery(conn,paste0("select * from INSPECTRS",year,quater,"_",workspace_no))
       result=dbFetch(rs)
 
       desc=dbSendQuery(conn,"select * from tab")
       desc=dbFetch(desc)
 
-      temp=dbSendQuery(conn,"select * from temporary")
-      temp=dbFetch(temp)
+      temp<<-dbSendQuery(conn,"select * from temporary")
+      temp<<-dbFetch(temp)
 
       compare=temp[num,9]
 
-      result
-
-
       if(
-      sum(str_detect(desc[,1],paste0("INSPECTRS",year,quater,"_BACKUP")))==0
+        ( desc[,1] %>%
+        str_detect(paste0("INSPECTRS",year,quater,"_",workspace_no,"_BACKUP")) %>%
+        sum() )==0
       ){
-        dbWriteTable(conn,paste0("INSPECTRS",year,quater,"_BACKUP"),result)
+        dbWriteTable(conn,paste0("INSPECTRS",year,quater,"_",workspace_no,"_BACKUP"),result)
       }
 
+      result$EXCEPT =
+        result$EXCEPT %>%
+        as.numeric()
+
+      if(direct!=7){
+        result=
+          result %>%
+          filter(!(EXCEPT %in% temp[num,9]&DIRECTION==direction[direct])) %>%
+          apply(.,2,function(x) x=ifelse(is.na(x),"",x)) %>%
+          as.data.frame()
+      }else{
+        result=
+          result %>%
+          filter(!(EXCEPT %in% temp[num,9]) ) %>%
+          apply(.,2,function(x) x=ifelse(is.na(x),"",x)) %>%
+          as.data.frame()
+      }
+      print(length(result$EXCEPT))
 
 
-
-         try(rs<-dbExecute(conn,paste0("drop INSPECTRS",year,quater)),
+      try(rs<-dbExecute(conn,paste0("drop table INSPECTRS",year,quater,"_",workspace_no)),
              silent=T)
-         dbHasCompleted(rs)
+      dbHasCompleted(rs)
 
-        # qry=sqlAppendTable(conn,paste0("TQI",year,"_",quater,"_",workspace_no),result,row.names=F)
-
-        # dbWriteTable(conn,paste0("TQI",year,"_",quater,"_",workspace_no),result,row.names=F)
-
-
-
-        # qry=sqlCreateTable(conn,paste0("TQI",year,"_",quater,"_",workspace_no),result)
-        # dbExecute(conn,qry)
-        # dbSendQuery(conn,qry)
-        # dbDisconnect(conn)
-        i=1;for(i in 1:length(result)){
-          result[is.na(result[,i]),i]=""
-          result[is.na(result[,i]),i]=NULL
-          # result[,i]=as.numeric(result[,i])
-
-        }
-        write.csv(result,paste0("/home/jsh/DB/BigTeam/TQI",year,"_",quater,"_",workspace_no,".csv"),row.names=F)
-        result<<-result
-        # return(num[1])
-
-
-
+      dbWriteTable(conn,paste0("INSPECTRS",year,quater,"_",workspace_no),result)
+      dbDisconnect(conn)
     }#function
  )#cmpfun
   A()
